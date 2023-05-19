@@ -15,6 +15,10 @@ spec:
       labels:
         name: orders-db
     spec:
+      volumes:
+        - name: pvc-demo-vol
+          persistentVolumeClaim:
+           claimName: pvc-orders-dp
       containers:
       - name: orders-db
         image: {{if .Values.global.registry}}{{ .Values.global.registry }}/{{end}}{{ .Values.ordersdb.image.repo }}:{{ .Values.ordersdb.image.tag }}
@@ -34,8 +38,4 @@ spec:
           readOnlyRootFilesystem: true
         volumeMounts:
         - mountPath: /tmp
-          name: tmp-volume
-      volumes:
-        - name: tmp-volume
-          emptyDir:
-            medium: Memory
+          name: pvc-demo-vol
