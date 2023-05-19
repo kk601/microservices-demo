@@ -20,9 +20,9 @@ spec:
       {{- end }}
     spec:
       volumes:
-        - name: pvc-orders-db-vol
-          persistentVolumeClaim:
-           claimName: pvc-orders-dp
+        - name: tmp-volume
+          emptyDir:
+            medium: Memory
       containers:
       - name: orders
         image: {{if .Values.global.registry}}{{ .Values.global.registry }}/{{end}}{{ .Values.orders.image.repo }}:{{ .Values.orders.image.tag }}
@@ -55,7 +55,7 @@ spec:
           readOnlyRootFilesystem: true
         volumeMounts:
         - mountPath: /tmp
-          name: pvc-orders-db-vol
+          name: tmp-volume
         livenessProbe:
           httpGet:
             path: /health
