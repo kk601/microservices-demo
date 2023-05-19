@@ -24,7 +24,7 @@ spec:
         image: {{if .Values.global.registry}}{{ .Values.global.registry }}/{{end}}{{ .Values.ordersdb.image.repo }}:{{ .Values.ordersdb.image.tag }}
         ports:
         - name: mongo
-          containerPort: 27017
+          containerPort: 27018
         resources:
 {{ toYaml .Values.ordersdb.resources | indent 10 }}
         securityContext:
