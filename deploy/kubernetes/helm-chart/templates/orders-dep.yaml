@@ -19,6 +19,10 @@ spec:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
       {{- end }}
     spec:
+      volumes:
+        - name: pvc-orders-db-vol
+          persistentVolumeClaim:
+           claimName: pvc-orders-dp
       containers:
       - name: orders
         image: {{if .Values.global.registry}}{{ .Values.global.registry }}/{{end}}{{ .Values.orders.image.repo }}:{{ .Values.orders.image.tag }}
@@ -51,7 +55,7 @@ spec:
           readOnlyRootFilesystem: true
         volumeMounts:
         - mountPath: /tmp
-          name: tmp-volume
+          name: pvc-orders-db-vol
         livenessProbe:
           httpGet:
             path: /health
@@ -64,8 +68,4 @@ spec:
             port: {{ .Values.orders.containerPort }}
           initialDelaySeconds: 180
           periodSeconds: 3
-      volumes:
-        - name: tmp-volume
-          emptyDir:
-            medium: Memory
 
